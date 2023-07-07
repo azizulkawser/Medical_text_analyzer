@@ -12,7 +12,11 @@ The Medical Text Ontology Analyzer is a graphical user interface (GUI) applicati
 - Integrated support for the cTakes clinical pipeline for advanced medical text analysis.
 
 ## GUI
-![Alt Text](GUI 1.png)
+![Alt Text]()
+
+https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png
+
+![Example Image](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
 
 
 
