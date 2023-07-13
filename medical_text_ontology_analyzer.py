@@ -26,9 +26,13 @@ class TextViewer:
         run_clinical_pipeline_button = tk.Button(self.root, text="Run cTakes Clinical Pipeline", command=self.run_clinical_pipeline)
         run_clinical_pipeline_button.pack(side=tk.TOP, padx=10, pady=10)
         
-        # Create a button to load an XML file
-        load_button = tk.Button(self.root, text="Load XML", command=self.load_xmi_file)
-        load_button.pack(side=tk.TOP, padx=10, pady=10)
+        # # Create a button to load an XML file
+        # load_button = tk.Button(self.root, text="Load XML", command=self.load_xmi_file)
+        # load_button.pack(side=tk.TOP, padx=10, pady=10)
+        
+        # Create a button to process the data and display the output
+        process_data_button = tk.Button(self.root, text="Extract Clinical NE", command=self.process_data)
+        process_data_button.pack(side=tk.TOP, padx=10, pady=10)
         
         # Create a button to clear the text area and output viewer
         clear_button = tk.Button(self.root, text="Clear Viewer", command=self.clear_viewer)
@@ -123,6 +127,135 @@ class TextViewer:
         
         # Clear the output viewer widget
         self.output_viewer.delete("1.0", tk.END)
+    
+    def process_data(self):
+        # Clear the output viewer
+        self.output_viewer.delete('1.0', tk.END)
+        
+        # Call the data_processing function
+        result_df = data_processing()
+        
+        # Convert the result DataFrame to a string representation
+        output_text = result_df.to_string(index=False)
+        
+        # Display the output in the output viewer
+        self.output_viewer.insert(tk.END, output_text)
+
+
+        
+        
+import xmltodict
+import json
+import pandas as pd
+
+def extract_ontology_concept_arr(data):
+    ontology_concept_arr_values = []
+
+    if isinstance(data, dict):
+        ontology_concept_arr = data.get('@ontologyConceptArr')
+        if ontology_concept_arr:
+            values = ontology_concept_arr.split(' ')
+            ontology_concept_arr_values.extend(values)
+    elif isinstance(data, list):
+        for item in data:
+            ontology_concept_arr = item.get('@ontologyConceptArr')
+            if ontology_concept_arr:
+                values = ontology_concept_arr.split(' ')
+                ontology_concept_arr_values.extend(values)
+
+    return ontology_concept_arr_values
+
+def create_dataframe(data, data_name):
+    df_data = []
+    
+    if isinstance(data, dict):
+        df_data.append({'Entity Type': data_name, '@begin': data.get('@begin'), '@end': data.get('@end')})
+    elif isinstance(data, list):
+        for item in data:
+            df_data.append({'Entity Type': data_name, '@begin': item.get('@begin'), '@end': item.get('@end')})
+    
+    df = pd.DataFrame(df_data)
+    return df
+
+def append_normalized_form(df, data):
+    normalized_forms = []
+    
+    for _, row in df.iterrows():
+        begin = int(row['@begin'])
+        
+        normalized_form = None
+        
+        try:
+            for item in data:
+                item_begin = int(item['@begin'])
+                
+                if begin == item_begin:
+                    normalized_form = item['@form']
+                    break
+        except KeyError:
+            pass
+        
+        normalized_forms.append(normalized_form)
+    
+    df['Entity Name'] = normalized_forms
+    return df
+
+def data_processing():
+    with open("C:/apache-ctakes-4.0.0.1/output/temp_input.txt.xmi") as xml_file:
+        data_dict = xmltodict.parse(xml_file.read())
+    
+    json_data = json.dumps(data_dict)
+
+    with open("data_1.json", "w") as json_file:
+        json_file.write(json_data)
+    
+    filename = "data_1.json"
+    
+    with open(filename, "r") as file:
+        data = json.load(file)
+    
+    try:
+        Medication_Mention = data['xmi:XMI']['textsem:MedicationMention']
+    except KeyError:
+        Medication_Mention = ''
+    ontology_concept_arr_MM = extract_ontology_concept_arr(Medication_Mention)
+    
+    try:
+        Procedure_Mention = data['xmi:XMI']['textsem:ProcedureMention']
+    except KeyError:
+        Procedure_Mention = ''
+    ontology_concept_arr_PM = extract_ontology_concept_arr(Procedure_Mention)
+    
+    try:
+        Sign_Symptom_Mention = data['xmi:XMI']['textsem:SignSymptomMention']
+    except KeyError:
+        Sign_Symptom_Mention = ''
+    ontology_concept_arr_SSM = extract_ontology_concept_arr(Sign_Symptom_Mention)
+    
+    try:
+        Disease_Disorder_Mention = data['xmi:XMI']['textsem:DiseaseDisorderMention']
+    except KeyError:
+        Disease_Disorder_Mention = ''
+    ontology_concept_arr_DDM = extract_ontology_concept_arr(Disease_Disorder_Mention)
+    
+    try:
+        Anatomical_Site_Mention = data['xmi:XMI']['textsem:AnatomicalSiteMention']
+    except KeyError:
+        Anatomical_Site_Mention = ''
+    ontology_concept_arr_ASM = extract_ontology_concept_arr(Anatomical_Site_Mention)
+    
+    df_MM = create_dataframe(Medication_Mention, 'Medication_Mention')
+    df_PM = create_dataframe(Procedure_Mention, 'Procedure_Mention')
+    df_SSM = create_dataframe(Sign_Symptom_Mention, 'Sign_Symptom_Mention')
+    df_DDM = create_dataframe(Disease_Disorder_Mention, 'Disease_Disorder_Mention')
+    df_ASM = create_dataframe(Anatomical_Site_Mention, 'Anatomical_Site_Mention')
+    
+    concat_df = pd.concat([df_DDM, df_MM, df_ASM, df_PM, df_SSM], axis=0)
+    
+    input_data = data['xmi:XMI']['syntax:ConllDependencyNode']
+    df = append_normalized_form(concat_df, input_data)
+    return df[['Entity Type','Entity Name']]
+
 
 
 if __name__ == '__main__':
