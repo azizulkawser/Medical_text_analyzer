@@ -2,6 +2,14 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
 import subprocess
 import os
+import xmltodict
+import json
+import pandas as pd
+import pandas as pd
+import spacy
+from nltk.tree import Tree
+import nltk
+#nltk.download('punkt')
 
 class TextViewer:
     
@@ -33,6 +41,14 @@ class TextViewer:
         # Create a button to process the data and display the output
         process_data_button = tk.Button(self.root, text="Extract Clinical NE", command=self.process_data)
         process_data_button.pack(side=tk.TOP, padx=10, pady=10)
+        
+        # Create a button to extract named entities from the text and display the output
+        extract_entities_button = tk.Button(self.root, text="Extract Name Entities", command=self.extract_and_display_entities)
+        extract_entities_button.pack(side=tk.TOP, padx=10, pady=10)
+        
+        # Create a button
+        tree_button = tk.Button(self.root, text="Visualize Trees", command=self.visualize_trees)
+        tree_button.pack(side=tk.TOP, padx=10, pady=10)
         
         # Create a button to clear the text area and output viewer
         clear_button = tk.Button(self.root, text="Clear Viewer", command=self.clear_viewer)
@@ -127,7 +143,7 @@ class TextViewer:
         
         # Clear the output viewer widget
         self.output_viewer.delete("1.0", tk.END)
-    
+        
     def process_data(self):
         # Clear the output viewer
         self.output_viewer.delete('1.0', tk.END)
@@ -140,13 +156,61 @@ class TextViewer:
         
         # Display the output in the output viewer
         self.output_viewer.insert(tk.END, output_text)
+    
+    def extract_and_display_entities(self):
+        # Get the text from the text area
+        text = self.text_area.get("1.0", tk.END)
 
+        # Load the spaCy English model
+        nlp = spacy.load("en_core_web_sm")
 
-        
-        
-import xmltodict
-import json
-import pandas as pd
+        # Process the text with spaCy
+        doc = nlp(text)
+
+        # Initialize lists to store entity types and names
+        entity_types = []
+        entity_names = []
+
+        # Iterate over the entities in the processed document
+        for ent in doc.ents:
+            entity_types.append(ent.label_)  # Append the entity type
+            entity_names.append(ent.text)    # Append the entity name
+
+        # Create a dataframe from the entity types and names
+        entity_df = pd.DataFrame({"Entity Type": entity_types, "Entity Name": entity_names})
+
+        # Clear the output viewer
+        self.output_viewer.delete("1.0", tk.END)
+
+        # Display the entity dataframe in the output viewer
+        self.output_viewer.insert(tk.END, entity_df.to_string())
+    
+    def visualize_trees(self):
+        text = self.text_area.get("1.0", tk.END).strip()  # Get the text from the input field
+
+        # Tokenize the text into sentences
+        sentences = nltk.sent_tokenize(text)
+
+        # Clear the output viewer
+        self.output_viewer.delete("1.0", tk.END)
+
+        # Iterate over each sentence
+        for sentence in sentences:
+            # Tokenize the sentence into words
+            words = nltk.word_tokenize(sentence)
+
+            # Perform part-of-speech tagging
+            tagged_words = nltk.pos_tag(words)
+
+            # Create a constituency parse tree
+            cp = nltk.RegexpParser("NP: {<DT>?<JJ>*<NN>}")
+
+            # Parse the tagged words
+            result = cp.parse(tagged_words)
+
+            # Display the constituency parse tree in the output viewer
+            self.output_viewer.insert(tk.END, str(result))
+            self.output_viewer.insert(tk.END, "\n\n")
 
 def extract_ontology_concept_arr(data):
     ontology_concept_arr_values = []
@@ -255,8 +319,6 @@ def data_processing():
     input_data = data['xmi:XMI']['syntax:ConllDependencyNode']
     df = append_normalized_form(concat_df, input_data)
     return df[['Entity Type','Entity Name']]
-
-
 
 if __name__ == '__main__':
     # Create a new instance of the Tkinter root window
