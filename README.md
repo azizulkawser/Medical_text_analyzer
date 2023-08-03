@@ -19,22 +19,23 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
 - Highlight negated words in the text
 
 ## GUI
-1. **UI**:
-![GUI View 2]([https://github.com/azizulkawser/medical_text_analyzer/blob/9916d80b38d31e51e0d709b7713d398991aee40a/GUI%202.png]
-2. **General Name Entity**:
-![GUI View 2](https://github.com/azizulkawser/medical_text_analyzer/blob/9916d80b38d31e51e0d709b7713d398991aee40a/GUI%202.png)
-2. **Chunk Parsing**:
-![GUI View 3](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
-4. **Constituency Parsing**:
-![GUI View 4](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
-6. **Dependency Parsing**:
-![GUI View 5](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
-8. **Clinical Name Entity**:
-![GUI View 6](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
-9. **Semantic Role Labeling**:
-![GUI View 7](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
-12. **Clinical Negation**:
-    ![GUI View 1](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
+**Medical Text Ontology Analyzer UI**:
+![Medical Text Ontology Analyzer](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%201.png)
+**Extract general named entitiese**:
+![Extract general named entities](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%202.png)
+**Perform chunk parsing**:
+![Perform chunk parsing](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%203.png)
+**Conduct constituency parsing**:
+![Conduct constituency parsing](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%204.png)
+**Perform dependency parsing**:
+![Perform dependency parsing](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%205.png)
+**Extract clinical named entities**:
+![Extract clinical named entities](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%206.png)
+**Perform semantic role labeling**:
+![Perform semantic role labeling](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%207.png)
+**Analyze clinical negation**:
+![Analyze clinical negation](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%208.png)
+
 ## Installation
 
 1. Clone the repository to your local machine.
