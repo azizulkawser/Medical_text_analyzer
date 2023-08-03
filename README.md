@@ -119,9 +119,6 @@ Make sure to install these dependencies before running the program:
    - Download cTakes from the official website: [cTakes Downloads](https://ctakes.apache.org/downloads.cgi)
    - Extract the downloaded files and configure the paths in the application.
 
-9. **webbrowser**:
-   - The `webbrowser` module is used to open SVG files in the default web browser.
-   - It's a standard library module, so no separate installation is needed.
 
 These dependencies are essential for running the "Medical Text Ontology Analyzer" application and utilizing its various features. Make sure to install them before using the application for seamless functionality.
 
