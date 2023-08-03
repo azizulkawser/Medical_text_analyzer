@@ -19,11 +19,22 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
 - Highlight negated words in the text
 
 ## GUI
-
+1. **UI**:
 ![GUI View 1](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
-
+2. **General Name Entity**:
 ![GUI View 2](https://github.com/azizulkawser/medical_text_analyzer/blob/9916d80b38d31e51e0d709b7713d398991aee40a/GUI%202.png)
-
+2. **Chunk Parsing**:
+![GUI View 3](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
+4. **Constituency Parsing**:
+![GUI View 4](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
+6. **Dependency Parsing**:
+![GUI View 5](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
+8. **Clinical Name Entity**:
+![GUI View 6](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
+9. **Semantic Role Labeling**:
+![GUI View 7](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
+12. **Clinical Negation**:
+    ![GUI View 1](https://github.com/azizulkawser/medical_text_analyzer/blob/ddccf86d606db52ed7f21a453aadd91658e296c0/GUI%201.png)
 ## Installation
 
 1. Clone the repository to your local machine.
