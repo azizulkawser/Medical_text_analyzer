@@ -16,6 +16,10 @@ from nltk.tree import Tree
 from nltk.tokenize import sent_tokenize
 from nltk.parse import stanford
 from spacy import displacy
+import requests
+from bs4 import BeautifulSoup
+
+
 
 
 class TextViewer:
@@ -25,10 +29,20 @@ class TextViewer:
         self.root = root
         self.root.title("Medical Text Ontology Analyzer")
         
+        # Create a weblink paste area widget
+        self.web_link_are_label = tk.Label(self.root, text="Paste a web link:")
+        self.web_link_are_label.pack(pady=5)
+        self.link_entry = tk.Entry(self.root, width=70)
+        self.link_entry.pack(pady=10)
+        
+        self.web_link_process_button = tk.Button(root, text="Extract text from the link", command=self.process_link)
+        # process_button = tk.Button(root, text="Extract Paragraphs", command=process_link)
+        self.web_link_process_button.pack(pady=10)
+        
         # Create a scrolled text area widget
         self.text_area_label = tk.Label(self.root, text="Enter text:")
         self.text_area_label.pack()
-        self.text_area = scrolledtext.ScrolledText(self.root, height = 10, width = 65, wrap=tk.WORD)
+        self.text_area = scrolledtext.ScrolledText(self.root, height = 10, width = 200, wrap=tk.WORD)
         self.text_area.pack()
         
         # Text frame Buttons
@@ -50,7 +64,7 @@ class TextViewer:
         # Create an output viewer to display the output content
         self.output_viewer_label = tk.Label(self.root, text="Output:")
         self.output_viewer_label.pack()
-        self.output_viewer = scrolledtext.ScrolledText(self.root, height=10, width = 65, wrap=tk.WORD)
+        self.output_viewer = scrolledtext.ScrolledText(self.root, height=10, width = 200, wrap=tk.WORD)
         self.output_viewer.pack()
         
         # General NLP Label
@@ -80,7 +94,7 @@ class TextViewer:
         medical_nlp_frame.pack(pady=10)
         medical_nlp_buttons = [
             ("Clinical Name Entity", self.process_clinical_NE),
-            ("Show Name Entity Relation", "show_name_entity_relation"),
+            #("Show Name Entity Relation", "show_name_entity_relation"),
             ("Semantic Role Labeling", self.semantic_role_labeling),
             ("Clinical Negation", self.negation)
         ]
@@ -541,11 +555,49 @@ class TextViewer:
                 end_index = f"{start_index}+{len(word)}c"
                 text_widget.tag_add(tag_name, start_index, end_index)
                 start_index = end_index
+#########################################################################################################################
+    def verify_link(self, link):
+        try:
+            response = requests.get(link)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
+        except requests.RequestException:
+            return False
+
+    def extract_text(self, link):
+            response = requests.get(link)
+            soup = BeautifulSoup(response.content, 'html.parser')
+            text = soup.get_text()
+            return text
+        # response = requests.get(link)
+        # soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # extracted_paragraphs = []
+        
+        # # Extract and clean paragraph text
+        # paragraphs = soup.find_all('p')
+        # for paragraph in paragraphs:
+        #     cleaned_paragraph = re.sub(r'\s+', ' ', paragraph.get_text().strip())
+        #     extracted_paragraphs.append(cleaned_paragraph)
+        
+        # return '\n'.join(extracted_paragraphs)
+
+    def process_link(self):
+        link = self.link_entry.get()
+        
+        if self.verify_link(link):
+            extracted_text = self.extract_text(link)
+            self.text_area.delete("1.0", tk.END)
+            self.text_area.insert(tk.END, extracted_text)
+        else:
+            messagebox.showerror("Error", "Invalid link or unable to fetch content.")
 
 if __name__ == '__main__':
     # Create a new instance of the Tkinter root window
     root = tk.Tk()
-    
+    root.state('zoomed')
     # Create an instance of the TextViewer class, passing the root window as an argument
     text_viewer = TextViewer(root)
     
