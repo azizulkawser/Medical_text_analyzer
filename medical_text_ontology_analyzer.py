@@ -35,9 +35,16 @@ class TextViewer:
         self.link_entry = tk.Entry(self.root, width=70)
         self.link_entry.pack(pady=10)
         
-        self.web_link_process_button = tk.Button(root, text="Extract text from the link", command=self.process_link)
-        # process_button = tk.Button(root, text="Extract Paragraphs", command=process_link)
-        self.web_link_process_button.pack(pady=10)
+        # link frame Buttons
+        link_frame = tk.Frame(self.root)
+        link_frame.pack(pady=10)
+        link_buttons = [
+            ("Extract text from the link", self.process_link),
+            ("?", self.show_extract_text_help)
+        ]
+        for text, command in link_buttons:
+            btn = tk.Button(link_frame, text=text, command=command)
+            btn.pack(side=tk.LEFT, padx=10)
         
         # Create a scrolled text area widget
         self.text_area_label = tk.Label(self.root, text="Enter text:")
@@ -49,8 +56,9 @@ class TextViewer:
         text_frame = tk.Frame(self.root)
         text_frame.pack(pady=10)
         text_buttons = [
-            ("Open Text File", self.open_file),
+            ("Browse text file", self.open_file),
             ("Run cTakes Clinical Pipeline", self.run_clinical_pipeline),
+            ("?", self.Run_Clinical_Pipeline_help),
             ("Clear Text", self.clear_viewer)
         ]
         for text, command in text_buttons:
@@ -69,20 +77,35 @@ class TextViewer:
         
         # General NLP Label
         general_nlp_label = tk.Label(self.root, text="General NLP Analysis", font=("Helvetica", 10, "bold"))
-        general_nlp_label.pack(pady=5)
+        general_nlp_label.pack()
         # General NLP Analysis Buttons
         self.current_sentence_index = 0
         general_nlp_frame = tk.Frame(self.root)
-        general_nlp_frame.pack(pady=10)
+        general_nlp_frame.pack(pady=2)
         general_nlp_buttons = [
             ("General Name Entity", self.process_general_NE),
             ("Chunk Parsing", self.chunk_parsing),
             ("Constituency parsing", self.constituency_parsing),
-            ("Dependency Parsing", self.dependency_parsing)
+            ("Dependency Parsing", self.dependency_parsing),
+            ("Semantic Role Labeling", self.semantic_role_labeling)
         ]
         for text, command in general_nlp_buttons:
             btn = tk.Button(general_nlp_frame, text=text, command=command)
             btn.pack(side=tk.LEFT, padx=5)
+        
+        general_nlp_help_frame = tk.Frame(self.root)
+        general_nlp_help_frame.pack(pady=1)
+        general_nlp_help_buttons = [
+            ("?", self.process_general_NE_help),
+            ("?", self.chunk_parsing_help),
+            ("?", self.constituency_parsing_help),
+            ("?", self.dependency_parsing_help),
+            ("?", self.semantic_role_labeling_help),
+        ]
+        for text, command in general_nlp_help_buttons:
+            btn = tk.Button(general_nlp_help_frame, text=text, command=command)
+            btn.pack(side=tk.LEFT, padx=50)
+        
         # Separator Line
         separator = ttk.Separator(root, orient="horizontal")
         separator.pack(fill="x", padx=5, pady=5)
@@ -94,13 +117,21 @@ class TextViewer:
         medical_nlp_frame.pack(pady=10)
         medical_nlp_buttons = [
             ("Clinical Name Entity", self.process_clinical_NE),
-            #("Show Name Entity Relation", "show_name_entity_relation"),
-            ("Semantic Role Labeling", self.semantic_role_labeling),
             ("Clinical Negation", self.negation)
         ]
         for text, command in medical_nlp_buttons:
             btn = tk.Button(medical_nlp_frame, text=text, command=command)
             btn.pack(side=tk.LEFT, padx=5)
+            
+        medical_nlp_help_frame = tk.Frame(self.root)
+        medical_nlp_help_frame.pack(pady=1)
+        medical_nlp_help_buttons = [
+            ("?", self.process_clinical_NE_help),
+            ("?", self.negation_help)
+        ]
+        for text, command in medical_nlp_help_buttons:
+            btn = tk.Button(medical_nlp_help_frame, text=text, command=command)
+            btn.pack(side=tk.LEFT, padx=50)
 #########################################################################################################################
     def open_file(self):
         # Open a file dialog to prompt the user to select a file
@@ -571,18 +602,6 @@ class TextViewer:
             soup = BeautifulSoup(response.content, 'html.parser')
             text = soup.get_text()
             return text
-        # response = requests.get(link)
-        # soup = BeautifulSoup(response.content, 'html.parser')
-        
-        # extracted_paragraphs = []
-        
-        # # Extract and clean paragraph text
-        # paragraphs = soup.find_all('p')
-        # for paragraph in paragraphs:
-        #     cleaned_paragraph = re.sub(r'\s+', ' ', paragraph.get_text().strip())
-        #     extracted_paragraphs.append(cleaned_paragraph)
-        
-        # return '\n'.join(extracted_paragraphs)
 
     def process_link(self):
         link = self.link_entry.get()
@@ -593,6 +612,38 @@ class TextViewer:
             self.text_area.insert(tk.END, extracted_text)
         else:
             messagebox.showerror("Error", "Invalid link or unable to fetch content.")
+#########################################################################################################################
+    def show_extract_text_help(self):
+        help_text = """
+        1. Enter a valid link in the designated field.
+        2. Click "Extract text from the Link" to process.
+        3. Verified links populate relevant content in the text area.
+        """
+        messagebox.showinfo("Help", help_text)
+    def Run_Clinical_Pipeline_help(self):
+        help_text = """Click "Run Ctakes Clinical_Pipeline" to analyze the text using ctakes clinical pipeline preprocessor."""
+        messagebox.showinfo("Help", help_text)
+    def process_general_NE_help(self):
+        help_text = """Click to identify and categorizing general named entities."""
+        messagebox.showinfo("Help", help_text)
+    def chunk_parsing_help(self):
+        help_text = """Click to represent how words in a sentence composed of words with specific grammar relationships."""
+        messagebox.showinfo("Help", help_text)
+    def constituency_parsing_help(self):
+        help_text = """Click to represent how words combine to form phrases and how those phrases combine to create larger sentence structures."""
+        messagebox.showinfo("Help", help_text)
+    def dependency_parsing_help(self):
+        help_text = """Click to represent relationships between words, where each word is connected to a governing word (head) through labeled directed edges, indicating the syntactic dependencies between them."""
+        messagebox.showinfo("Help", help_text)
+    def process_clinical_NE_help(self):
+        help_text = """Click to identify and categorizing clinical named entities."""
+        messagebox.showinfo("Help", help_text)
+    def semantic_role_labeling_help(self):
+        help_text = """Click to identify semantic roles, indicating how nouns and pronouns relate to the sentence's verb and contribute to its meaning."""
+        messagebox.showinfo("Help", help_text)
+    def negation_help(self):
+        help_text = """Click to understand negated values detected by Ctakes."""
+        messagebox.showinfo("Help", help_text)
 
 if __name__ == '__main__':
     # Create a new instance of the Tkinter root window
