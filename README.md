@@ -11,9 +11,9 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
   - Perform chunk parsing
   - Conduct constituency parsing
   - Perform dependency parsing
+  - Perform semantic role labeling
 - Perform Medical NLP Analysis
   - Extract clinical named entities
-  - Perform semantic role labeling
   - Analyze clinical negation
 - Provide a comprehensive graphical illustration of complex text entity relationships
 - Highlight negated words in the text
