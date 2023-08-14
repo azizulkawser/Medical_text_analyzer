@@ -20,21 +20,26 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
 
 ## GUI
 **Medical Text Ontology Analyzer UI**:
-![Medical Text Ontology Analyzer](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%201.png)
+![Medical Text Ontology Analyzer](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%201.png)
+**Extract Text from weblink**:
+![Extract Text from weblink](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%202.png)
 **Extract general named entitiese**:
-![Extract general named entities](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%202.png)
+![Extract general named entities](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%203.png)
 **Perform chunk parsing**:
-![Perform chunk parsing](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%203.png)
+![Perform chunk parsing](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%204.png)
 **Conduct constituency parsing**:
-![Conduct constituency parsing](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%204.png)
+![Conduct constituency parsing](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%205.png)
 **Perform dependency parsing**:
-![Perform dependency parsing](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%205.png)
-**Extract clinical named entities**:
-![Extract clinical named entities](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%206.png)
+![Perform dependency parsing](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%206.png)
+![Perform dependency parsing 1](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%207.png)
 **Perform semantic role labeling**:
-![Perform semantic role labeling](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%207.png)
+![Perform semantic role labeling](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%208.png)
+**Extract clinical named entities**:
+![Extract clinical named entities](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%209.png)
 **Analyze clinical negation**:
-![Analyze clinical negation](https://github.com/azizulkawser/medical_text_analyzer/raw/7de70c512235518b99b635735287f01ddbd8a092/GUI%208.png)
+![Analyze clinical negation](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%2010.png)
+**Help**:
+![Help](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%2011.png)
 
 ## Installation
 
@@ -69,10 +74,10 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
        - Use "Chunk Parsing" to parse sentences and identify chunks like noun phrases (NP), verb phrases (VP), and more. This also visualize the parsed trees for chunk.
        - "Constituency Parsing" helps analyze sentence structure through constituency parsing and visualize the parsed trees.
        - "Dependency Parsing" reveals the grammatical relationships between words and display the realtion. For "Dependency Parsing," the application generates SVG files illustrating dependency relations for each sentence.
+       - "Semantic Role Labeling" uncovers relationships and roles between words in sentences.
      
      - **Medical NLP Analysis**:
        - "Clinical Name Entity" extracts specialized clinical named entities.
-       - "Semantic Role Labeling" uncovers relationships and roles between words in sentences.
        - "Clinical Negation" identifies and highlights negated terms for enhanced comprehension.
      
    - Each analysis result will be displayed in the "Output" area of the GUI.
