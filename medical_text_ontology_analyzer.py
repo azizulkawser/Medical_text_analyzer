@@ -174,7 +174,7 @@ class TextViewer:
         
         try:
             # Call the cTakes clinical pipeline to process the text
-            command = r'C:\apache-ctakes-4.0.0.1\bin\runClinicalPipeline -i C:\apache-ctakes-4.0.0.1\testdata\ --xmiOut C:\apache-ctakes-4.0.0.1\output\ --key efd9c726-5226-43c1-8cb1-c5ac40bae98c'
+            command = r'C:\apache-ctakes-4.0.0.1\bin\runClinicalPipeline -i C:\apache-ctakes-4.0.0.1\testdata\ --xmiOut C:\apache-ctakes-4.0.0.1\output\ --key ###############################'
             
             # Run the command as a subprocess, using the cTakes directory as the current working directory
             subprocess.run(command, shell=True, cwd=r'C:\apache-ctakes-4.0.0.1')
