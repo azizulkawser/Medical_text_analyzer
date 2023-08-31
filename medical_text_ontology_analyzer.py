@@ -18,8 +18,10 @@ from nltk.parse import stanford
 from spacy import displacy
 import requests
 from bs4 import BeautifulSoup
-
-
+import stanza
+import spacy_stanza
+from negspacy.negation import Negex
+from negspacy.termsets import termset
 
 
 class TextViewer:
@@ -117,7 +119,8 @@ class TextViewer:
         medical_nlp_frame.pack(pady=10)
         medical_nlp_buttons = [
             ("Clinical Name Entity", self.process_clinical_NE),
-            ("Clinical Negation", self.negation)
+            ("Clinical Negation", self.negation),
+            ("Clinical Polarity", self.polarity)
         ]
         for text, command in medical_nlp_buttons:
             btn = tk.Button(medical_nlp_frame, text=text, command=command)
@@ -127,7 +130,8 @@ class TextViewer:
         medical_nlp_help_frame.pack(pady=1)
         medical_nlp_help_buttons = [
             ("?", self.process_clinical_NE_help),
-            ("?", self.negation_help)
+            ("?", self.negation_help),
+            ("?", self.polarity_help)
         ]
         for text, command in medical_nlp_help_buttons:
             btn = tk.Button(medical_nlp_help_frame, text=text, command=command)
@@ -174,7 +178,7 @@ class TextViewer:
         
         try:
             # Call the cTakes clinical pipeline to process the text
-            command = r'C:\apache-ctakes-4.0.0.1\bin\runClinicalPipeline -i C:\apache-ctakes-4.0.0.1\testdata\ --xmiOut C:\apache-ctakes-4.0.0.1\output\ --key ###############################'
+            command = r'C:\apache-ctakes-4.0.0.1\bin\runClinicalPipeline -i C:\apache-ctakes-4.0.0.1\testdata\ --xmiOut C:\apache-ctakes-4.0.0.1\output\ --key efd9c726-5226-43c1-8cb1-c5ac40bae98c'
             
             # Run the command as a subprocess, using the cTakes directory as the current working directory
             subprocess.run(command, shell=True, cwd=r'C:\apache-ctakes-4.0.0.1')
@@ -538,7 +542,7 @@ class TextViewer:
         else:
             self.current_sentence_index = 0
 #########################################################################################################################
-    def negation(self):
+    def polarity(self):
         with open('data_1.json') as json_file:
             data = json.load(json_file)
         text = data['xmi:XMI']['cas:Sofa']['@sofaString']
@@ -550,11 +554,12 @@ class TextViewer:
 
         self.output_viewer.delete("1.0", tk.END)
         self.output_viewer.insert(tk.END, text)
+        # words_to_highlight = polarity_df['word']
+        
+        tag_names = ["positive_tag", "neutral_tag", "negative_tag"]
+        foreground_colors = ["green", "black", "red"]
 
-        words_to_highlight = polarity_df['word']
-        tag_name = "highlight_tag"
-        foreground_color = "red"
-        self.highlight_words(self.output_viewer, words_to_highlight, tag_name, foreground_color)
+        self.highlight_words_from_dataframe(self.output_viewer, polarity_df, tag_names, foreground_colors)
 
     def extract_polarity_info(self, data):
         polarity_info = []
@@ -573,19 +578,65 @@ class TextViewer:
                 polarity_info.extend(self.extract_polarity_info(item))
 
         return polarity_info
-
-    def highlight_words(self, text_widget, words_to_highlight, tag_name, foreground_color, bold=True):
-        text_widget.tag_configure(tag_name, foreground=foreground_color, font=("Helvetica", 12, "bold" if bold else "normal"))
+    def highlight_words_from_dataframe(self, text_widget, df, tag_names, foreground_colors, bold=True):
+        text_widget.tag_delete("highlight_tag")  # Clear any existing highlight tags
         
-        for word in words_to_highlight:
-            start_index = "1.0"
-            while True:
-                start_index = text_widget.search(word, start_index, stopindex=tk.END)
-                if not start_index:
-                    break
-                end_index = f"{start_index}+{len(word)}c"
+        for polarity, tag_name, foreground_color in zip([1, 0, -1], tag_names, foreground_colors):
+            text_widget.tag_configure(tag_name, foreground=foreground_color, font=("Helvetica", 12, "bold" if bold else "normal"))
+            
+            polarity_df = df[df['polarity'] == polarity]
+            
+            for _, row in polarity_df.iterrows():
+                start_index = f"1.{row['@begin']}"
+                end_index = f"1.{row['@end']}"
                 text_widget.tag_add(tag_name, start_index, end_index)
-                start_index = end_index
+
+
+    #####################################################################################################################
+    def negation(self):
+        text = self.text_area.get("1.0", tk.END).strip()
+        data_frame = self.process_clinical_negation(text)
+        self.output_viewer.delete("1.0", tk.END)
+        self.output_viewer.insert(tk.END, text)
+        # Configure tags for highlighting
+        self.output_viewer.tag_config('negated', foreground='red')
+        self.output_viewer.tag_config('not_negated', foreground='green')
+        self.highlight_entities_with_negated_tags(self.output_viewer, data_frame)
+    
+    def process_clinical_negation(self,text):
+        nlp = spacy_stanza.load_pipeline('en', package='mimic', processors={'ner': 'i2b2'})
+        ts = termset("en_clinical")
+        nlp.add_pipe("negex", config={"ent_types":["PROBLEM","TEST",'TREATMENT']})
+        doc = nlp(text)
+        results = []
+        for e in doc.ents:
+            results.append({
+                'Entity Text': e.text,
+                'Entity Type': e.label_,
+                'Negation Detected': e._.negex
+            })
+        df = pd.DataFrame(results)
+        return df
+    def highlight_entities_with_negated_tags(self, text_widget, entities_df):
+        for idx, row in entities_df.iterrows():
+            entity_text = row['Entity Text']
+            negation_detected = row['Negation Detected']
+            
+            if negation_detected:
+                tag_name = 'negated'
+            else:
+                tag_name = 'not_negated'
+            
+            start_idx = '1.0'
+            while True:
+                start_idx = text_widget.search(entity_text, start_idx, stopindex=tk.END)
+                if not start_idx:
+                    break
+                
+                end_idx = f"{start_idx}+{len(entity_text)}c"
+                text_widget.tag_add(tag_name, start_idx, end_idx)
+                start_idx = end_idx
+    
 #########################################################################################################################
     def verify_link(self, link):
         try:
@@ -642,8 +693,12 @@ class TextViewer:
         help_text = """Click to identify semantic roles, indicating how nouns and pronouns relate to the sentence's verb and contribute to its meaning."""
         messagebox.showinfo("Help", help_text)
     def negation_help(self):
-        help_text = """Click to understand negated values detected by Ctakes."""
+        help_text = """Click to understand detected negated values."""
         messagebox.showinfo("Help", help_text)
+    def polarity_help(self):
+        help_text = """Click to understand polarity values detected by Ctakes."""
+        messagebox.showinfo("Help", help_text)    
+        
 
 if __name__ == '__main__':
     # Create a new instance of the Tkinter root window
