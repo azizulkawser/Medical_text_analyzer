@@ -15,6 +15,7 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
 - Perform Medical NLP Analysis
   - Extract clinical named entities
   - Analyze clinical negation
+  - Analyze clinical polarity
 - Provide a comprehensive graphical illustration of complex text entity relationships
 - Highlight negated words in the text
 
@@ -37,16 +38,80 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
 **Extract clinical named entities**:
 ![Extract clinical named entities](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%209.png)
 **Analyze clinical negation**:
-![Analyze clinical negation](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%2010.png)
+![Analyze clinical negation](https://github.com/azizulkawser/Medical_text_analyzer/blob/e017ed9321c39fed2c914bfb27608d4238f5d6c3/GUI%2010-Analyze%20clinical%20negation.png)
+**Analyze clinical polarity**:
+![Analyze clinical polarity](https://github.com/azizulkawser/Medical_text_analyzer/blob/e017ed9321c39fed2c914bfb27608d4238f5d6c3/GUI%2012-Analyze%20clinical%20polarity.png)
 **Help**:
 ![Help](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%2011.png)
 
-## Installation
+#########################
+**Installation Guide for Medical Text Ontology Analyzer**
 
-1. Clone the repository to your local machine.
-2. Ensure you have Python 3.11 installed.
+*Note: This guide assumes that you are using a Windows operating system.*
+**Step 1: Clone the repository to your local machine.**
+**Step 2: Install Python**
 
-## Usage
+1. If you don't already have Python installed, download the latest Python version (at least Python 3.11) from the official Python website: [Python Downloads](https://www.python.org/downloads/).
+
+2. Run the Python installer and make sure to check the box that says "Add Python to PATH" during installation. This will make it easier to run Python from the command line.
+
+3. Follow the installation wizard's instructions to complete the Python installation.
+
+**Step 3: Install Required Libraries**
+
+Open a command prompt or terminal window and run the following commands to install the necessary Python libraries:
+
+```bash
+pip install spacy
+pip install nltk
+pip install webbrowser
+pip install requests
+pip install beautifulsoup4
+pip install stanza
+pip install spacy-stanza
+pip install negspacy
+pip install pyyaml
+```
+
+**Step 4: Download and Install Stanford Parser**
+
+1. Download the Stanford Parser JAR file and models JAR file from the official website: [Stanford Parser](https://stanfordnlp.github.io/CoreNLP/download.html).
+
+2. Create a directory for the Stanford Parser on your system. You can choose any location you prefer.
+
+3. Place the downloaded JAR files (`stanford-parser.jar` and `stanford-parser-3.x.x-models.jar`) into the directory you created in step 2.
+
+**Step 5: Configure Paths in `config.yaml`**
+
+1. Open the `config.yaml` file in a text editor.
+
+2. Configure the following paths in the `config.yaml` file:
+
+   - `ctakes/installation_dir`: Set this to the directory where cTakes Clinical Pipeline is installed.
+   - `ctakes/input_dir`: Set this to the directory where input data will be processed.
+   - `ctakes/output_dir`: Set this to the directory where cTakes output will be saved.
+   - `ctakes/pipeline_key`: Set this to your cTakes pipeline key.
+
+   - `stanford_parser/path_to_jar`: Set this to the path of the Stanford Parser JAR file.
+   - `stanford_parser/path_to_models_jar`: Set this to the path of the Stanford Parser models JAR file.
+
+3. Save the `config.yaml` file with your changes.
+
+**Step 6: Run the Application**
+
+1. Navigate to the directory where the script (`medical_text_analyzer.py`) is located.
+
+2. Open a command prompt or terminal window in that directory.
+
+3. Run the application by executing the following command:
+
+   ```bash
+   python medical_text_analyzer.py
+   ```
+
+4. The Medical Text Ontology Analyzer GUI should open, and you can start using the application to analyze medical text data.
+
+**Step 7: Using the Application**
 
 1. **Run the Application**:
   Run the program by executing the following command:
