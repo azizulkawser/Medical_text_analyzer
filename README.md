@@ -44,7 +44,7 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
 **Help**:
 ![Help](https://github.com/azizulkawser/medical_text_analyzer/blob/33dbcf596f37a28d845aa0b90e8e227e9e36b0a6/GUI%2011.png)
 
-**Installation Guide for Medical Text Ontology Analyzer**
+**Installation Guide for Medical Text Ontology Analyzer**  
 
 *Note: This guide assumes that you are using a Windows operating system.*
 **Step 1: Clone the repository to your local machine.**
