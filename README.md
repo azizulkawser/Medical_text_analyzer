@@ -47,7 +47,9 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
 **Installation Guide for Medical Text Ontology Analyzer**  
 
 *Note: This guide assumes that you are using a Windows operating system.*
+
 **Step 1: Clone the repository to your local machine.**
+
 **Step 2: Install Python**
 
 1. If you don't already have Python installed, download the latest Python version (at least Python 3.11) from the official Python website: [Python Downloads](https://www.python.org/downloads/).
