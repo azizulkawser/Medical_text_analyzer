@@ -63,6 +63,8 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
 Open a command prompt or terminal window and run the following commands to install the necessary Python libraries:
 
 ```bash
+pip install pandas
+pip install xmltodict
 pip install spacy
 pip install nltk
 pip install webbrowser
@@ -73,6 +75,7 @@ pip install spacy-stanza
 pip install negspacy
 pip install pyyaml
 ```
+Also make sure all the dependencies mentioned below are met.
 
 **Step 4: Download and Install Stanford Parser**
 
@@ -80,7 +83,7 @@ pip install pyyaml
 
 2. Create a directory for the Stanford Parser on your system. You can choose any location you prefer.
 
-3. Place the downloaded JAR files (`stanford-parser.jar` and `stanford-parser-3.x.x-models.jar`) into the directory you created in step 2.
+3. Place the downloaded JAR files (`stanford-parser.jar` and `stanford-parser-3.x.x-models.jar`) into the directory you created in act 2.
 
 **Step 5: Configure Paths in `config.yaml`**
 
@@ -91,7 +94,7 @@ pip install pyyaml
    - `ctakes/installation_dir`: Set this to the directory where cTakes Clinical Pipeline is installed.
    - `ctakes/input_dir`: Set this to the directory where input data will be processed.
    - `ctakes/output_dir`: Set this to the directory where cTakes output will be saved.
-   - `ctakes/pipeline_key`: Set this to your cTakes pipeline key.
+   - `ctakes/pipeline_key`: Set this to your cTakes pipeline UMLS API key.
 
    - `stanford_parser/path_to_jar`: Set this to the path of the Stanford Parser JAR file.
    - `stanford_parser/path_to_models_jar`: Set this to the path of the Stanford Parser models JAR file.
@@ -100,38 +103,31 @@ pip install pyyaml
 
 **Step 6: Run the Application**
 
-1. Navigate to the directory where the script (`medical_text_analyzer.py`) is located.
+1. Navigate to the directory where the script (`medical_text_ontology_analyzer.py`) is located.
 
 2. Open a command prompt or terminal window in that directory.
 
 3. Run the application by executing the following command:
 
    ```bash
-   python medical_text_analyzer.py
+   python medical_text_ontology_analyzer.py
    ```
 
 4. The Medical Text Ontology Analyzer GUI should open, and you can start using the application to analyze medical text data.
 
 **Step 7: Using the Application**
 
-1. **Run the Application**:
-  Run the program by executing the following command:
-
-   ```sh
-   python medical_text_ontology_analyzer.py
-   ```
-
-2. **Open a Document**:
+1. **Open a Document**:
    
    - After launching the application, a graphical user interface (GUI) window will appear.
    - Click the "Open Text File" button to load a medical text document that you want to analyze.
    - The contents of the selected document will be displayed in the text area within the GUI.
 
-3. **Run cTakes Clinical Pipeline**:
+2. **Run cTakes Clinical Pipeline**:
    - Once the text document is loaded, click on the "Run cTakes Clinical Pipeline" button.
    - This action will initiate the cTakes clinical pipeline to process the loaded medical text.
      
-4. **Perform Analysis**:
+3. **Perform Analysis**:
    
    - The application offers a variety of analysis options under different categories. Use these buttons to perform specific analysis tasks:
    
@@ -145,7 +141,7 @@ pip install pyyaml
      - **Medical NLP Analysis**:
        - "Clinical Name Entity" extracts specialized clinical named entities.
        - "Clinical Negation" identifies and highlights negated terms for enhanced comprehension.
-     
+       - "Clinical Polarity" identifies and highlights polarity which refers to the positive, negative, or uncertain nature of a medical statement.      
    - Each analysis result will be displayed in the "Output" area of the GUI.
 
 ## Dependencies
@@ -159,15 +155,21 @@ Make sure to install these dependencies before running the program:
 2. **Tkinter**:
    - Tkinter is the standard GUI library for Python, and it's used for creating the graphical user interface of the application.
    - Tkinter usually comes bundled with Python installations, so no separate installation is required.
+     
+3. **PyYAML:** PyYAML is used for reading configuration data from the `config.yaml` file. Install it using pip:
 
-3. **NLTK**:
+   ```bash
+   pip install pyyaml
+   ```
+
+4. **NLTK**:
    - NLTK (Natural Language Toolkit) is a powerful library for working with human language data and performing various NLP tasks.
    - You can install NLTK using the following command:
      ```
      pip install nltk
      ```
 
-4. **spaCy**:
+5. **spaCy**:
    - spaCy is a popular NLP library that provides efficient text processing capabilities.
    - Install spaCy using:
      ```
@@ -178,29 +180,54 @@ Make sure to install these dependencies before running the program:
      python -m spacy download en_core_web_sm
      ```
 
-5. **xmltodict**:
+6. **spacy-stanza:** Spacy-stanza is used for combining spaCy and stanza for clinical NLP tasks. Install it using pip:
+
+    ```bash
+    pip install spacy-stanza
+    ```
+
+7. **xmltodict**:
    - xmltodict is used to convert XML data into a dictionary format.
    - Install it with:
      ```
      pip install xmltodict
      ```
 
-6. **pandas**:
+8. **pandas**:
    - pandas is a data manipulation and analysis library.
    - Install it using:
      ```
      pip install pandas
      ```
+     
+9. **BeautifulSoup:** BeautifulSoup is used for web scraping when extracting text from web links. Install it using pip:
 
-7. **Stanford NLP Parser**:
+   ```bash
+   pip install beautifulsoup4
+   ```
+
+10. **stanza:** Stanza is a library for natural language processing. Install it using pip and also download clinical model for Stanza:
+
+    ```bash
+    pip install stanza
+    python -m stanza download en --package=mimic --processors={'ner': 'i2b2'}
+
+    ```
+11. **negspacy:** Negspacy is used for negation detection. Install it using pip:
+
+    ```bash
+    pip install negspacy
+    ```
+
+12. **Stanford NLP Parser**:
    - If you intend to use the constituency parsing feature, you'll need the Stanford NLP Parser.
    - Download the parser from the official website: [Stanford NLP Parser](https://stanfordnlp.github.io/CoreNLP/index.html#download)
-   - Extract the downloaded files and provide the paths in the application.
+   - Extract the downloaded files and provide the paths in the configuration file.
 
-8. **cTakes**:
-   - For using the "Run cTakes Clinical Pipeline" feature, you'll need to install cTakes and provide relevant paths in the application.
+13. **cTakes**:
+   - For using the "Run cTakes Clinical Pipeline" feature, you'll need to install cTakes and provide relevant paths in the configuration file.
    - Download cTakes from the official website: [cTakes Downloads](https://ctakes.apache.org/downloads.cgi)
-   - Extract the downloaded files and configure the paths in the application.
+   - Extract the downloaded files and configure the paths in the configuration file.
 
 
 These dependencies are essential for running the "Medical Text Ontology Analyzer" application and utilizing its various features. Make sure to install them before using the application for seamless functionality.
