@@ -2,7 +2,7 @@ ctakes:
   installation_dir: C:\apache-ctakes-4.0.0.1\
   input_dir: C:\apache-ctakes-4.0.0.1\testdata\
   output_dir: C:\apache-ctakes-4.0.0.1\output\
-  pipeline_key: efd9c726-5226-43c1-8cb1-c5ac40bae98c
+  pipeline_key: ############################
 stanford_parser:
   path_to_jar: C:\Users\User\AppData\Roaming\stanford-parser-4.2.0\stanford-parser-full-2020-11-17\stanford-parser.jar
   path_to_models_jar: C:\Users\User\AppData\Roaming\stanford-parser-4.2.0\stanford-parser-full-2020-11-17\stanford-parser-4.2.0-models.jar
