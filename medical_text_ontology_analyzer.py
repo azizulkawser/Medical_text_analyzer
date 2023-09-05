@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import yaml
 from tkinter import filedialog, scrolledtext, messagebox
 import subprocess
 import os
@@ -25,6 +26,21 @@ from negspacy.termsets import termset
 
 
 class TextViewer:
+    
+    def load_config(config_file):
+        with open(config_file, 'r') as file:
+            config = yaml.safe_load(file)
+        return config #['ctakes'], config['stanford_parser']
+    
+    config = load_config('config.yaml')
+    # Get the installation directory from the configuration
+    installation_dir = config['ctakes']['installation_dir']
+    input_dir = config['ctakes']['input_dir']
+    output_dir = config['ctakes']['output_dir']
+    pipeline_key = config['ctakes']['pipeline_key']
+    
+    stanford_parser_path_to_jar = config['stanford_parser']['path_to_jar']
+    stanford_parser_path_to_models_jar = config['stanford_parser']['path_to_models_jar']
     
     def __init__(self, root):
         # Setting the title of the GUI
@@ -160,7 +176,20 @@ class TextViewer:
         # Clear the output viewer widget
         self.output_viewer.delete("1.0", tk.END)
         
+    # def load_config(self, config_file):
+    #     with open(config_file, 'r') as file:
+    #         config = yaml.safe_load(file)
+    #     return config['ctakes']
+    
     def run_clinical_pipeline(self):
+        # # Load configuration from the file
+        # config = self.load_config('config.yaml')
+        # # Get the installation directory from the configuration
+        # installation_dir = config['installation_dir']
+        # input_dir = config['input_dir']
+        # output_dir = config['output_dir']
+        # pipeline_key = config['pipeline_key']
+        
         # Get the text from the text area
         text = self.text_area.get("1.0", tk.END).strip()
         
@@ -171,17 +200,19 @@ class TextViewer:
             return
         
         # Save the text to a temporary file
-        temp_file = r"C:\apache-ctakes-4.0.0.1\testdata\temp_input.txt"
+        temp_file = f'{self.input_dir}\\temp_input' #r"C:\apache-ctakes-4.0.0.1\testdata\temp_input.txt"
         with open(temp_file, "w") as file:
             # Write the text content to the temporary file
             file.write(text)
         
         try:
             # Call the cTakes clinical pipeline to process the text
-            command = r'C:\apache-ctakes-4.0.0.1\bin\runClinicalPipeline -i C:\apache-ctakes-4.0.0.1\testdata\ --xmiOut C:\apache-ctakes-4.0.0.1\output\ --key ##########################'
+            #command = r'C:\apache-ctakes-4.0.0.1\bin\runClinicalPipeline -i C:\apache-ctakes-4.0.0.1\testdata\ --xmiOut C:\apache-ctakes-4.0.0.1\output\ --key efd9c726-5226-43c1-8cb1-c5ac40bae98c'
+            # Construct the command using the configuration settings
+            command = f'{self.installation_dir}\\bin\\runClinicalPipeline -i {self.input_dir} --xmiOut {self.output_dir} --key {self.pipeline_key}'
             
             # Run the command as a subprocess, using the cTakes directory as the current working directory
-            subprocess.run(command, shell=True, cwd=r'C:\apache-ctakes-4.0.0.1')
+            subprocess.run(command, shell=True, cwd=f'{self.installation_dir}') #r'C:\apache-ctakes-4.0.0.1'
             
             # Delete the temporary input file
             os.remove(temp_file)
@@ -202,21 +233,21 @@ class TextViewer:
         # Display the output in the output viewer
         self.output_viewer.insert(tk.END, output_text)
         
-    def extract_ontology_concept_arr(self,data):
-        ontology_concept_arr_values = []
+    # def extract_ontology_concept_arr(self,data):
+    #     ontology_concept_arr_values = []
         
-        if isinstance(data, dict):
-            ontology_concept_arr = data.get('@ontologyConceptArr')
-            if ontology_concept_arr:
-                values = ontology_concept_arr.split(' ')
-                ontology_concept_arr_values.extend(values)
-        elif isinstance(data, list):
-            for item in data:
-                ontology_concept_arr = item.get('@ontologyConceptArr')
-                if ontology_concept_arr:
-                    values = ontology_concept_arr.split(' ')
-                    ontology_concept_arr_values.extend(values)
-        return ontology_concept_arr_values
+    #     if isinstance(data, dict):
+    #         ontology_concept_arr = data.get('@ontologyConceptArr')
+    #         if ontology_concept_arr:
+    #             values = ontology_concept_arr.split(' ')
+    #             ontology_concept_arr_values.extend(values)
+    #     elif isinstance(data, list):
+    #         for item in data:
+    #             ontology_concept_arr = item.get('@ontologyConceptArr')
+    #             if ontology_concept_arr:
+    #                 values = ontology_concept_arr.split(' ')
+    #                 ontology_concept_arr_values.extend(values)
+    #     return ontology_concept_arr_values
     
     def create_dataframe(self,data, data_name):
         df_data = []
@@ -254,7 +285,10 @@ class TextViewer:
         return df
     
     def data_processing(self):
-        with open("C:/apache-ctakes-4.0.0.1/output/temp_input.txt.xmi") as xml_file:
+        #output_dir = r'C:/apache-ctakes-4.0.0.1/output/'
+        
+        #"C:/apache-ctakes-4.0.0.1/output/temp_input.xmi"
+        with open(f'{self.output_dir}temp_input.xmi') as xml_file:
             data_dict = xmltodict.parse(xml_file.read())
         
         json_data = json.dumps(data_dict)
@@ -271,31 +305,31 @@ class TextViewer:
             Medication_Mention = data['xmi:XMI']['textsem:MedicationMention']
         except KeyError:
             Medication_Mention = ''
-        ontology_concept_arr_MM = self.extract_ontology_concept_arr(Medication_Mention)
+        # ontology_concept_arr_MM = self.extract_ontology_concept_arr(Medication_Mention)
         
         try:
             Procedure_Mention = data['xmi:XMI']['textsem:ProcedureMention']
         except KeyError:
             Procedure_Mention = ''
-        ontology_concept_arr_PM = self.extract_ontology_concept_arr(Procedure_Mention)
+        # ontology_concept_arr_PM = self.extract_ontology_concept_arr(Procedure_Mention)
         
         try:
             Sign_Symptom_Mention = data['xmi:XMI']['textsem:SignSymptomMention']
         except KeyError:
             Sign_Symptom_Mention = ''
-        ontology_concept_arr_SSM = self.extract_ontology_concept_arr(Sign_Symptom_Mention)
+        # ontology_concept_arr_SSM = self.extract_ontology_concept_arr(Sign_Symptom_Mention)
         
         try:
             Disease_Disorder_Mention = data['xmi:XMI']['textsem:DiseaseDisorderMention']
         except KeyError:
             Disease_Disorder_Mention = ''
-        ontology_concept_arr_DDM = self.extract_ontology_concept_arr(Disease_Disorder_Mention)
+        # ontology_concept_arr_DDM = self.extract_ontology_concept_arr(Disease_Disorder_Mention)
         
         try:
             Anatomical_Site_Mention = data['xmi:XMI']['textsem:AnatomicalSiteMention']
         except KeyError:
             Anatomical_Site_Mention = ''
-        ontology_concept_arr_ASM = self.extract_ontology_concept_arr(Anatomical_Site_Mention)
+        # ontology_concept_arr_ASM = self.extract_ontology_concept_arr(Anatomical_Site_Mention)
         
         df_MM = self.create_dataframe(Medication_Mention, 'Medication_Mention')
         df_PM = self.create_dataframe(Procedure_Mention, 'Procedure_Mention')
@@ -375,8 +409,8 @@ class TextViewer:
             self.output_viewer.delete(1.0, tk.END)
             self.output_viewer.insert(tk.END, f"Sentence {self.current_sentence_index}: {sentence}\n\n")
             parser = stanford.StanfordParser(
-            path_to_jar="C:/Users/User/AppData/Roaming/stanford-parser-4.2.0/stanford-parser-full-2020-11-17/stanford-parser.jar",
-            path_to_models_jar="C:/Users/User/AppData/Roaming/stanford-parser-4.2.0/stanford-parser-full-2020-11-17/stanford-parser-4.2.0-models.jar"
+            path_to_jar=self.stanford_parser_path_to_jar, #"C:/Users/User/AppData/Roaming/stanford-parser-4.2.0/stanford-parser-full-2020-11-17/stanford-parser.jar",
+            path_to_models_jar= self.stanford_parser_path_to_models_jar #"C:/Users/User/AppData/Roaming/stanford-parser-4.2.0/stanford-parser-full-2020-11-17/stanford-parser-4.2.0-models.jar"
             )
             # Parse the sentence
             parse_tree = list(parser.raw_parse(sentence))[0]
@@ -531,8 +565,8 @@ class TextViewer:
             self.output_viewer.delete(1.0, tk.END)
             self.output_viewer.insert(tk.END, f"Sentence {self.current_sentence_index}: {sentence}\n\n")
             parser = stanford.StanfordParser(
-            path_to_jar="C:/Users/User/AppData/Roaming/stanford-parser-4.2.0/stanford-parser-full-2020-11-17/stanford-parser.jar",
-            path_to_models_jar="C:/Users/User/AppData/Roaming/stanford-parser-4.2.0/stanford-parser-full-2020-11-17/stanford-parser-4.2.0-models.jar"
+            path_to_jar=self.stanford_parser_path_to_jar, #"C:/Users/User/AppData/Roaming/stanford-parser-4.2.0/stanford-parser-full-2020-11-17/stanford-parser.jar",
+            path_to_models_jar=self.stanford_parser_path_to_models_jar #"C:/Users/User/AppData/Roaming/stanford-parser-4.2.0/stanford-parser-full-2020-11-17/stanford-parser-4.2.0-models.jar"
             )
             # Parse the sentence
             parsed_result = list(parser.raw_parse(sentence))[0]
