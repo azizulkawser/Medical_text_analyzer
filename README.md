@@ -63,17 +63,25 @@ The **Medical Text Ontology Analyzer** is a graphical user interface (GUI) appli
 Open a command prompt or terminal window and run the following commands to install the necessary Python libraries:
 
 ```bash
-pip install pandas
-pip install xmltodict
-pip install spacy
-pip install nltk
+pip install pandas==2.0.3
+pip install xmltodict==0.13.0
+pip install spacy==3.6.1
+pip install nltk==3.8.1
 pip install webbrowser
-pip install requests
-pip install beautifulsoup4
-pip install stanza
-pip install spacy-stanza
-pip install negspacy
-pip install pyyaml
+pip install requests==2.31.0
+pip install beautifulsoup4==4.12.2
+pip install stanza==1.5.0
+pip install spacy-stanza==1.0.3
+pip install negspacy==1.0.4
+pip install pyyaml==6.0.1
+pip install stanfordnlp==0.2.0
+
+-- download spacy models form github
+pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.6.0/en_core_web_md-3.6.0-py3-none-any.whl#sha256=1618fc62e7aedc2b778caa3ea6e9c8280beac3b83fe7b93316cbb9e8f3abe7c5
+
+pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.6.0/en_core_web_sm-3.6.0-py3-none-any.whl#sha256=83276fc78a70045627144786b52e1f2728ad5e29e5e43916ec37ea9c26a11212
+
+
 ```
 Also make sure all the dependencies mentioned below are met.
 
