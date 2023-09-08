@@ -87,11 +87,11 @@ Also make sure all the dependencies mentioned below are met.
 
 **Step 4: Download and Install Stanford Parser**
 
-1. Download the Stanford Parser JAR file and models JAR file from the official website: [Stanford Parser](https://stanfordnlp.github.io/CoreNLP/download.html).
+1. Download the Stanford Parser JAR file and models JAR file (4.2.0 and above) from the official website: [https://stanfordnlp.github.io/CoreNLP/download.html](https://nlp.stanford.edu/software/stanford-parser-4.2.0.zip)
 
 2. Create a directory for the Stanford Parser on your system. You can choose any location you prefer.
 
-3. Place the downloaded JAR files (`stanford-parser.jar` and `stanford-parser-3.x.x-models.jar`) into the directory you created in act 2.
+3. Place the downloaded JAR files (`stanford-parser.jar` and `stanford-parser-4.2.0-models.jar`) into the directory you created in act 2.
 
 **Step 5: Configure Paths in `config.yaml`**
 
