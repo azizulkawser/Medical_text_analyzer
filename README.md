@@ -229,7 +229,7 @@ Make sure to install these dependencies before running the program:
 
 12. **Stanford NLP Parser**:
    - If you intend to use the constituency parsing feature, you'll need the Stanford NLP Parser.
-   - Download the parser from the official website: [Stanford NLP Parser](https://stanfordnlp.github.io/CoreNLP/index.html#download)
+   - Download the parser from the official website: [Stanford NLP Parser](https://nlp.stanford.edu/software/stanford-parser-4.2.0.zip)
    - Extract the downloaded files and provide the paths in the configuration file.
 
 13. **cTakes**:
