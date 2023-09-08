@@ -76,7 +76,7 @@ pip install negspacy==1.0.4
 pip install pyyaml==6.0.1
 pip install stanfordnlp==0.2.0
 
--- download spacy models form github
+# download spacy models form github
 pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.6.0/en_core_web_md-3.6.0-py3-none-any.whl#sha256=1618fc62e7aedc2b778caa3ea6e9c8280beac3b83fe7b93316cbb9e8f3abe7c5
 
 pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.6.0/en_core_web_sm-3.6.0-py3-none-any.whl#sha256=83276fc78a70045627144786b52e1f2728ad5e29e5e43916ec37ea9c26a11212
